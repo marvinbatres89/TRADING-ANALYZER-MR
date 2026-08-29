@@ -4,7 +4,7 @@ export function visualDirection(result) {
     return `MATCHES ${result.metadata?.digit ?? "--"}`;
   }
   if (result.direction === "NO_OPERAR") {
-    return "MATCHES 0";
+    return "NO OPERAR";
   }
   return result.direction;
 }
