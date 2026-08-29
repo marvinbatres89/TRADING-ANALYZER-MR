@@ -1,8 +1,0 @@
-{
-  "name": "Trading Analyst Pro MR V11.3.2",
-  "short_name": "Analyst MR",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#06111b",
-  "theme_color": "#06111b"
-}
