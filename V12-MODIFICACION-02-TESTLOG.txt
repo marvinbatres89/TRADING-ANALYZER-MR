@@ -1,0 +1,12 @@
+TRADING ANALYZER PRO MR V12.0.1-TESTLOG
+
+MODIFICACIÓN 02
+- Umbrales equilibrados: Rise/Fall 72, Even/Odd 70, Over/Under 70, Match 76.
+- Registro persistente de pruebas en localStorage.
+- Botón MARCAR ENTRADA AHORA para medir milisegundos desde el inicio real del 10.
+- Botones GANADA / PERDIDA para cerrar manualmente cada operación DEMO.
+- Registro de mercado, estrategia, dirección, score y metadatos de diferencia.
+- Alimenta estadísticas y calibrador usando el segundo observado.
+- Últimas 10 pruebas visibles y opción COPIAR para diagnóstico.
+
+NO incorpora compra automática. El objetivo es medir primero predicción + timing manual.

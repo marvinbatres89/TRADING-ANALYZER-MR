@@ -1,0 +1,10 @@
+TRADING ANALYST PRO MR V11.3.2
+
+PRUEBAS:
+1. Cambiar Español / English: botones, encabezados e indicadores deben cambiar.
+2. CONNECT: se consulta active_symbols automáticamente.
+3. Mercado: deben agregarse volatilidades compatibles informadas por Deriv.
+4. Matches: PREDICTION permanece bloqueado hasta tener 36 ticks.
+5. Matches 1-9 puede emitirse si supera filtros; 0 sigue siendo NO OPERAR.
+
+La señal técnica no garantiza el resultado de una operación.

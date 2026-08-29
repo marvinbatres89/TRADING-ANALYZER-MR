@@ -1,0 +1,22 @@
+TRADING ANALYST PRO MR V11.3.2 — CORRECCIÓN DE ARRANQUE
+
+DIAGNÓSTICO CONFIRMADO
+app.js importa ./market-buffer.js.
+El ZIP V11.3 sí contenía market-buffer.js, pero en la captura del repositorio
+ese archivo no aparece entre manifest.webmanifest y market-registry.js.
+Sin market-buffer.js el navegador no puede completar la carga de app.js.
+
+PARA ESTA VERSIÓN
+- market-buffer.js está incluido.
+- Se mantienen las mejoras V11.3.
+- Se cambia la versión/caché a 11.3.2.
+- Todos los módulos deben subirse juntos.
+
+COMPROBACIÓN EN GITHUB
+Debe verse esta secuencia (alfabéticamente):
+manifest.webmanifest
+market-buffer.js
+market-registry.js
+memory-manager.js
+
+No es necesario crear otro repositorio.
