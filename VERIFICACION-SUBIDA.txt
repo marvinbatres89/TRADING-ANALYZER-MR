@@ -1,1 +1,0 @@
-V11.3.4: app.js debe estar en la misma carpeta que index.html. Esta versión carga los módulos desde la URL actual y elimina cachés antiguas.
