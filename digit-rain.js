@@ -10,6 +10,7 @@
   let columns = 0;
   let drops = [];
   let fontSize = 16;
+  let watermarkPulse = 0;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -21,9 +22,30 @@
     );
   }
 
+  function drawWatermark() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const scale = Math.min(canvas.width, canvas.height) * 0.62;
+
+    watermarkPulse += 0.004;
+    const glow = 0.05 + Math.sin(watermarkPulse) * 0.018;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(-0.12);
+    ctx.font = `700 ${scale}px 'Playfair Display', serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = `rgba(232,190,109,${glow})`;
+    ctx.fillText("MR", 0, 0);
+    ctx.restore();
+  }
+
   function draw() {
-    ctx.fillStyle = "rgba(3,20,30,0.16)";
+    ctx.fillStyle = "rgba(10,8,6,0.14)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    drawWatermark();
 
     ctx.font = `${fontSize}px 'IBM Plex Mono', monospace`;
 
@@ -32,8 +54,8 @@
       const x = i * fontSize;
       const y = drops[i] * fontSize;
 
-      const leading = Math.random() > 0.93;
-      ctx.fillStyle = leading ? "rgba(166,255,239,0.9)" : "rgba(123,240,224,0.28)";
+      const leading = Math.random() > 0.94;
+      ctx.fillStyle = leading ? "rgba(248,223,160,0.75)" : "rgba(201,138,79,0.18)";
       ctx.fillText(char, x, y);
 
       if (y > canvas.height && Math.random() > 0.975) {
@@ -51,8 +73,8 @@
   window.addEventListener("resize", resize);
 
   if (!reduceMotion) {
-    setInterval(draw, 70);
+    setInterval(draw, 75);
   } else {
-    draw();
+    drawWatermark();
   }
 })();
