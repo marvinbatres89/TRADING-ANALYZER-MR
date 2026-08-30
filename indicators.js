@@ -151,7 +151,7 @@ function autocorrelationSignal(prices, size = 40) {
   };
 }
 
-function volatility(prices, size = 30) {
+export function volatility(prices, size = 30) {
   const sample = prices.slice(-size);
   if (sample.length < 5) return { level: "LOW", percent: 0 };
 
