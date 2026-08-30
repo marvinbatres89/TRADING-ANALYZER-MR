@@ -2,6 +2,30 @@
   "use strict";
   const SELECT_IDS = ["marketSelect", "strategySelect", "modeSelect"];
 
+  const STRATEGY_BADGES = {
+    rise_fall: "RF",
+    even_odd: "EO",
+    over_under: "OU",
+    match: "MA",
+    boom: "BM",
+    crash: "CR"
+  };
+
+  function badgeFor(nativeSelect, option) {
+    if (nativeSelect.id === "strategySelect") {
+      return STRATEGY_BADGES[option.value] || option.value.slice(0, 2).toUpperCase();
+    }
+
+    if (nativeSelect.id === "marketSelect") {
+      const label = option.textContent || "";
+      const numberMatch = label.match(/(\d+)/);
+      const isFast = /\(1s\)/i.test(label);
+      return numberMatch ? `${numberMatch[1]}${isFast ? "s" : ""}` : "--";
+    }
+
+    return (option.textContent || "").slice(0, 2).toUpperCase();
+  }
+
   function closeAll(except = null) {
     document.querySelectorAll(".custom-select-shell.open").forEach((shell) => {
       if (shell === except) return;
@@ -40,16 +64,25 @@
       text.className = "custom-select-option-text";
       text.textContent = option.textContent;
 
+      const badge = document.createElement("span");
+      badge.className = "select-badge";
+      badge.textContent = badgeFor(nativeSelect, option);
+      badge.setAttribute("aria-hidden", "true");
+
       const indicator = document.createElement("span");
       indicator.className = "custom-select-radio";
       indicator.setAttribute("aria-hidden", "true");
-      item.append(text, indicator);
+      item.append(badge, text, indicator);
 
       const sync = () => {
         const selected = nativeSelect.value === option.value;
         item.classList.toggle("selected", selected);
         item.setAttribute("aria-selected", String(selected));
-        if (selected) triggerText.textContent = option.textContent;
+        if (selected) {
+          triggerText.textContent = option.textContent;
+          const triggerBadge = panel.closest(".custom-select-shell")?.querySelector(".select-badge.trigger-badge");
+          if (triggerBadge) triggerBadge.textContent = badge.textContent;
+        }
       };
 
       item.addEventListener("click", () => {
@@ -82,12 +115,15 @@
     trigger.className = "custom-select-trigger";
     trigger.setAttribute("aria-haspopup", "listbox");
     trigger.setAttribute("aria-expanded", "false");
+    const triggerBadge = document.createElement("span");
+    triggerBadge.className = "select-badge trigger-badge";
+    triggerBadge.setAttribute("aria-hidden", "true");
     const triggerText = document.createElement("span");
     triggerText.className = "custom-select-trigger-text";
     const arrow = document.createElement("span");
     arrow.className = "custom-select-arrow";
     arrow.setAttribute("aria-hidden", "true");
-    trigger.append(triggerText, arrow);
+    trigger.append(triggerBadge, triggerText, arrow);
 
     const panel = document.createElement("div");
     panel.className = "custom-select-panel";
