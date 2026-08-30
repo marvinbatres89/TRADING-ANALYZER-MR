@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="./style.css?v=12.0.3-INSTRUMENT">
 </head>
 <body>
+<canvas id="rainCanvas" aria-hidden="true"></canvas>
 <main class="app-shell">
   <header class="hero">
     <div class="brand">
@@ -165,6 +166,37 @@
       <div class="ticker-stat">
         <span data-i18n="falls">BAJADAS</span>
         <strong id="tickerFalls">0</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="card radar-card">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">RADAR DE DÍGITOS</p>
+        <h2>Hot / Cold · Volatilidad</h2>
+      </div>
+      <span id="radarSample" class="mini-pill">0 muestras</span>
+    </div>
+
+    <div class="radar-grid">
+      <div class="radar-column">
+        <p class="radar-title hot"><span>🔥</span> Hot</p>
+        <div id="radarHot" class="radar-list"></div>
+      </div>
+      <div class="radar-column">
+        <p class="radar-title cold"><span>❄️</span> Cold</p>
+        <div id="radarCold" class="radar-list"></div>
+      </div>
+    </div>
+
+    <div class="volatility-gauge">
+      <div class="section-head">
+        <span class="metric-label">VOLATILIDAD</span>
+        <span id="volatilityLevel" class="volatility-level">--</span>
+      </div>
+      <div class="volatility-track">
+        <div id="volatilityFill" class="volatility-fill"></div>
       </div>
     </div>
   </section>
@@ -384,6 +416,7 @@
   <p id="floatingDetail">--</p>
 </div>
 
+<script src="./digit-rain.js?v=12.0.4-VISUAL" defer></script>
 <script src="./custom-select.js?v=12.0.0-BASE" defer></script>
 <script src="./bootstrap.js?v=12.0.0-BASE" defer></script>
 </body>
