@@ -546,3 +546,76 @@ footer{text-align:center;color:var(--muted-2);font-size:.68rem;padding:18px;font
   .test-record{grid-template-columns:1fr 1fr}
   .test-result{grid-column:1/-1;justify-self:start}
 }
+
+/* =========================================================
+   FONDO: lluvia de dígitos (canvas decorativo)
+   ========================================================= */
+#rainCanvas{
+  position:fixed;inset:0;z-index:-3;width:100vw;height:100vh;
+  opacity:.55;pointer-events:none;
+}
+
+/* =========================================================
+   SELECTORES EN PÍLDORA CON INSIGNIA (estilo tipo video)
+   ========================================================= */
+.select-badge{
+  flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;font-family:var(--font-mono);
+  font-size:.62rem;font-weight:700;letter-spacing:.01em;
+  background:var(--signal-dim);color:var(--signal-strong);
+  border:1px solid rgba(123,240,224,.4);
+}
+.custom-select-option.selected .select-badge{
+  background:var(--signal);color:#03141b;border-color:var(--signal);
+}
+.custom-select-trigger{border-radius:999px;padding:9px 16px 9px 9px;gap:10px}
+.custom-select-panel{border-radius:22px}
+.custom-select-option{border-radius:999px}
+
+/* =========================================================
+   RADAR DE DÍGITOS — Hot / Cold + volatilidad
+   ========================================================= */
+.radar-card{border-color:var(--glass-line-soft)}
+.radar-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.radar-title{
+  margin:0 0 9px;font-size:.72rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;font-family:var(--font-mono);
+  display:flex;align-items:center;gap:6px;
+}
+.radar-title.hot{color:var(--danger)}
+.radar-title.cold{color:var(--info)}
+.radar-list{display:flex;flex-direction:column;gap:8px}
+.radar-row{
+  display:grid;grid-template-columns:26px 1fr 44px;gap:8px;align-items:center;
+}
+.radar-digit{
+  width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--font-mono);font-weight:700;font-size:.78rem;
+  background:rgba(3,20,30,.6);border:1px solid var(--glass-line-soft);
+}
+.radar-digit.hot{color:var(--danger);border-color:rgba(240,138,128,.45)}
+.radar-digit.cold{color:var(--info);border-color:rgba(142,200,240,.45)}
+.radar-track{height:7px;border-radius:4px;background:rgba(3,20,30,.6);overflow:hidden}
+.radar-fill{display:block;height:100%;border-radius:4px}
+.radar-fill.hot{background:linear-gradient(90deg,var(--danger),#ffb3a8)}
+.radar-fill.cold{background:linear-gradient(90deg,var(--info),#c3e4ff)}
+.radar-percent{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-align:right}
+
+.volatility-gauge{margin-top:18px}
+.volatility-level{
+  font-family:var(--font-mono);font-weight:700;font-size:.82rem;
+  padding:4px 10px;border-radius:999px;background:var(--glass);
+  border:1px solid var(--glass-line-soft);color:var(--text);
+}
+.volatility-track{
+  margin-top:9px;height:10px;border-radius:6px;overflow:hidden;
+  background:rgba(3,20,30,.6);border:1px solid var(--glass-line-soft);
+}
+.volatility-fill{display:block;height:100%;width:0;transition:width .4s;background:var(--confirmed)}
+.volatility-fill.level-low{background:linear-gradient(90deg,var(--confirmed),#a8f0c4)}
+.volatility-fill.level-medium{background:linear-gradient(90deg,var(--warn),#f7e7a8)}
+.volatility-fill.level-high{background:linear-gradient(90deg,var(--danger),#ffb3a8)}
+.volatility-fill.level-very-high{background:linear-gradient(90deg,#ff6a5c,#ffb3a8);box-shadow:0 0 10px rgba(255,106,92,.6)}
+@media(max-width:620px){
+  .radar-grid{grid-template-columns:1fr}
+}
