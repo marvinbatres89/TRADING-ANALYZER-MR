@@ -8,7 +8,7 @@ import { diagnostics } from "./diagnostics.js";
 import { derivAPI } from "./deriv-api.js";
 import { marketBuffer } from "./market-buffer.js";
 import { latencyMonitor } from "./latency-monitor.js";
-import { buildSnapshot } from "./indicators.js";
+import { buildSnapshot, volatility as volatilityLevel } from "./indicators.js";
 import { exploreOpportunity } from "./engine1.js";
 import { validateOpportunity } from "./engine2.js";
 import { buildConsensus } from "./consensus.js";
@@ -44,6 +44,7 @@ const UI = {};
   "saveCalibration","resetCalibration","calibrationTable",
   "languageSelect","tickerMarketName","tickerConnection","tickerPrice",
   "tickerLastDigit","tickerDigits","tickerEven","tickerOdd","tickerRises","tickerFalls",
+  "radarSample","radarHot","radarCold","volatilityLevel","volatilityFill",
   "refreshMarkets","manualMarketSymbol","manualMarketName","manualMarketOneSecond",
   "addManualMarket","marketRegistryMessage",
   "entryAlertEnabled","entryAlertSecond","entryAlertDelay","entryFlash","appUpdateStatus",
@@ -379,6 +380,52 @@ function renderTicker() {
   setText(UI.tickerFalls, falls);
 }
 
+function renderMarketRadar() {
+  if (!UI.radarHot || !UI.radarCold) return;
+
+  const digits = marketBuffer.digits.slice(-100);
+  const frequency = Array(10).fill(0);
+
+  digits.forEach((digit) => {
+    if (Number.isInteger(digit) && digit >= 0 && digit <= 9) {
+      frequency[digit] += 1;
+    }
+  });
+
+  setText(UI.radarSample, `${digits.length} muestras`);
+
+  const ranked = frequency
+    .map((count, digit) => ({ digit, count, percent: digits.length ? (count / digits.length) * 100 : 0 }))
+    .sort((a, b) => b.count - a.count);
+
+  const hot = ranked.slice(0, 3);
+  const cold = ranked.slice(-3).reverse();
+
+  const renderList = (container, items, tone) => {
+    container.innerHTML = "";
+    items.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "radar-row";
+      row.innerHTML = `
+        <span class="radar-digit ${tone}">${item.digit}</span>
+        <span class="radar-track"><span class="radar-fill ${tone}" style="width:${Math.min(100, item.percent * 4)}%"></span></span>
+        <span class="radar-percent">${item.percent.toFixed(1)}%</span>
+      `;
+      container.appendChild(row);
+    });
+  };
+
+  renderList(UI.radarHot, hot, "hot");
+  renderList(UI.radarCold, cold, "cold");
+
+  const vol = volatilityLevel(marketBuffer.prices);
+  setText(UI.volatilityLevel, vol.level);
+  if (UI.volatilityFill) {
+    UI.volatilityFill.style.width = `${Math.min(100, vol.percent * 900)}%`;
+    UI.volatilityFill.className = `volatility-fill level-${vol.level.replace(/\s+/g, "-").toLowerCase()}`;
+  }
+}
+
 function processTick(tick) {
   if (tick.symbol !== state.symbol) return;
 
@@ -394,6 +441,7 @@ function processTick(tick) {
   renderDigits();
   renderLatency();
   renderTicker();
+  renderMarketRadar();
 
   if (state.engineOn) {
     state.snapshot = buildSnapshot({
