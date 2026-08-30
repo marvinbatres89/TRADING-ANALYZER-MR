@@ -419,7 +419,8 @@ function renderMarketRadar() {
   renderList(UI.radarCold, cold, "cold");
 
   const vol = volatilityLevel(marketBuffer.prices);
-  setText(UI.volatilityLevel, vol.level);
+  const volLabels = { LOW: "BAJA", MEDIUM: "MEDIA", HIGH: "ALTA", "VERY HIGH": "MUY ALTA" };
+  setText(UI.volatilityLevel, volLabels[vol.level] || vol.level);
   if (UI.volatilityFill) {
     UI.volatilityFill.style.width = `${Math.min(100, vol.percent * 900)}%`;
     UI.volatilityFill.className = `volatility-fill level-${vol.level.replace(/\s+/g, "-").toLowerCase()}`;
@@ -643,11 +644,24 @@ async function requestPrediction() {
   if (first.direction === "NO_OPERAR") {
     UI.signalCard.className = "card signal-card no-operate";
     setText(UI.signalState, "NO OPERAR");
-    setText(UI.signalTitle, "Matches descartado");
-    setText(UI.signalValue, "MATCHES 0");
-    showFloating("no-operate", "NO OPERAR", "MATCHES 0", "El número 0 está excluido.");
-    voiceAssistant.speak("Coincidencia cero. No operar.");
-    setTimeout(() => finishPrediction("El candidato fue 0 y se descartó."), 2200);
+
+    if (state.strategy === "match") {
+      setText(UI.signalTitle, "Matches descartado");
+      setText(UI.signalValue, "MATCHES 0");
+      showFloating("no-operate", "NO OPERAR", "MATCHES 0", "El número 0 está excluido.");
+      voiceAssistant.speak("Coincidencia cero. No operar.");
+      setTimeout(() => finishPrediction("El candidato fue 0 y se descartó."), 2200);
+      return;
+    }
+
+    const noOperateReason =
+      (first.reasons && first.reasons[0]) ||
+      "Sin desviación estadística significativa: patrón indistinguible de ruido.";
+    setText(UI.signalTitle, "Sin entrada");
+    setText(UI.signalValue, "SIN ENTRADA");
+    showFloating("no-operate", "NO OPERAR", "SIN ENTRADA", noOperateReason);
+    voiceAssistant.speak("Sin entrada. No operar.");
+    setTimeout(() => finishPrediction(noOperateReason), 2200);
     return;
   }
 
