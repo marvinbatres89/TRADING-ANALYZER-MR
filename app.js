@@ -811,8 +811,12 @@ async function beginPredictionSequence(result) {
   // PREPARAR se envía antes de que comience el segundo 10.
   // De este modo el BOT puede solicitar/guardar la propuesta sin mover
   // el instante real de ejecución.
-  const prepareLeadMs = 1200;
-  const executeMessageGapMs = 700;
+  // Reducido de 1200/700ms: el bot sigue necesitando un margen mínimo
+  // para pedir la cotización a Deriv antes de comprar, pero ya no
+  // agregamos demora artificial de sobra para una cuenta regresiva
+  // visual que en modo automático nadie necesita ver.
+  const prepareLeadMs = 500;
+  const executeMessageGapMs = 250;
   const countdownStartAt = Date.now() + prepareLeadMs;
   // TARGET real permanece intacto. El ajuste solo mueve la alerta visual AHORA.
   const targetExecutionAt =
